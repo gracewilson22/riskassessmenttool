@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Risk Assessment</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Risk Assessment Form</h1>
+
+<div id="questions"></div>
+
+<button id="submit" type="button">Calculate Risks</button>
+
+<div id="progress-container">
+  <div id="progress-bar"></div>
+</div>
+
+<script>
+  let allQuestions = [];
+
+  Promise.all([
+    fetch('/api/questions').then(res => res.json()),
+    fetch('/api/categories').then(res => res.json()),
+    fetch('/api/criteria').then(res => res.json())
+  ]).then(([questions, categories, criteria]) => {
+    allQuestions = questions.map(q => ({
+      ...q,
+      criteria: criteria.find(c => c.id === q.criteria_id),
+      category: categories.find(cat => cat.id === q.criteria?.category_id)
+    }));
+
+    const container = document.getElementById('questions');
+    container.innerHTML = allQuestions.map((q, i) => `
+        <div class="question" data-id="${q.id}">
+          <p>${i+1}. ${q.text}</p>
+          <select>
+            <option value="1">1 (Highest Risk)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (Lowest Risk)</option>
+          </select>
+        </div>
+      `).join('');
+
+    setupProgressBar();
+  });
+
+  document.getElementById('submit').addEventListener('click', () => {
+    const responses = allQuestions.map((q, i) => ({
+      questionId: q.id,
+      score: parseInt(document.querySelectorAll('select')[i].value)
+    }));
+
+    localStorage.setItem('riskResponses', JSON.stringify(responses));
+    localStorage.setItem('riskQuestions', JSON.stringify(allQuestions));
+    window.location.href = '/results.html';
+  });
+
+  function setupProgressBar() {
+    const selects = document.querySelectorAll('select');
+    selects.forEach(s => s.addEventListener('change', updateProgress));
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const answered = [...document.querySelectorAll('select')]
+            .filter(s => s.value).length;
+    document.getElementById('progress-bar').style.width =
+            `${(answered / allQuestions.length) * 100}%`;
+  }
+</script>
+</body>
+</html>

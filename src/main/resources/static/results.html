@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h1>Risk Results</h1>
+
+<div class="chart-container">
+    <canvas id="riskChart"></canvas>
+</div>
+
+<div class="results">
+    <div class="risk-group">
+        <h2>High Risks</h2>
+        <ul id="high-risks"></ul>
+    </div>
+
+    <div class="risk-group">
+        <h2>Low Risks</h2>
+        <ul id="low-risks"></ul>
+    </div>
+</div>
+
+<div class="navigation">
+    <button id="back-button" onclick="window.location.href='/'">
+        ← Back to Assessment
+    </button>
+</div>
+
+<script src="/results.js"></script>
+</body>
+</html>
+
+
+
+

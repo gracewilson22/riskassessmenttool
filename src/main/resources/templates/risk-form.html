@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Risk Assessment</title>
+</head>
+<body>
+<h1>Submit Risk</h1>
+<form th:action="@{/assess}" method="post">
+    <input type="text" name="riskDescription" placeholder="Describe the risk">
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
+
