@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY . .
-RUN ./gradlew build
+RUN ./gradlew bootJar
 CMD ["java", "-jar", "build/libs/riskassessmenttool.jar"]  # No wildcards
