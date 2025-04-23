@@ -1,10 +1,10 @@
+# Use Gradle image to build the app
 FROM gradle:7.4-jdk17 AS build
+COPY --chown=gradle:gradle . /home/gradle/project
 WORKDIR /home/gradle/project
-COPY . /home/gradle/project
-RUN gradle bootJar
+RUN gradle build --no-daemon
 
+# Use a smaller image to run the app
 FROM eclipse-temurin:17-jdk-jammy
-WORKDIR /app
 COPY --from=build /home/gradle/project/build/libs/*.jar app.jar
-EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
